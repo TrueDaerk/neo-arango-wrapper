@@ -46,19 +46,23 @@ class Collection {
    /**
     * Stores the given document into the collection.
     *
-    * @param Document|array $document ArangoDB document or assoc array (will create document from assoc array).
-    * @param array $options Options for storing.
+    * @param Document|\Traversable|array $document ArangoDB document or Traversable (will create document from Traversable).
+    * @param array $options Options for storing. Use "_key" to set the key in the document, if the given $document is Traversable.
     * @return mixed Result of the store.
     * @throws \ArangoDBClient\Exception
     */
    public function store($document, $options = []) {
-      if (is_array($document)) {
+      if ($document instanceof \Traversable || is_array($document)) {
          // Transform assoc array to an arangodb document
          $doc = new Document();
          foreach ($document as $key => $value) {
             $doc->$key = $value;
          }
          $document = $doc;
+         if (isset($options["_key"])) {
+            $doc->set("_key", $options["_key"]);
+            unset($options["_key"]);
+         }
       }
       return $this->documentHandler->store($document, $this->internalCollection, $options);
    }

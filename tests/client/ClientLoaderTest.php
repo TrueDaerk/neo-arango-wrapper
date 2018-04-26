@@ -107,4 +107,17 @@ class ClientLoaderTest extends TestCase {
       $result = $collection->query("FOR x IN @@collection RETURN x");
       $this->assertEquals(0, count($result->getAll()));
    }
+
+   /**
+    * @throws Exception
+    */
+   public function testInsertWithId() {
+      $collection = $this->client->myname;
+      $id = $collection->store([
+         "Trueto" => "me",
+         "dont" => "dodat"
+      ], ["_key" => "abc6gt"]);
+      $this->assertEquals("myname/abc6gt", $id);
+      $this->assertTrue($collection->removeById($id));
+   }
 }
