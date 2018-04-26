@@ -1,0 +1,7 @@
+{
+  "arangodb": {
+    "username": "root",
+    "password": "77zhBdge",
+    "endpoint": "tcp://175.1.2.3:8529"
+  }
+}
